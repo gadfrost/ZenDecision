@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZenDecision - Focus & Décision</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#2c3e50">
+    <link rel="apple-touch-icon" href="assets/icon-192.png">
+</head>
+<body>
+    <header>
+        <h1>ZenDecision</h1>
+        <nav>
+            <button id="tab-focus" class="active">Focus</button>
+            <button id="tab-decision">Décision</button>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Section Focus : Sons d'ambiance -->
+        <section id="section-focus">
+            <div class="sound-grid">
+                <button class="sound-btn" data-sound="rain">
+                    <span class="icon">🌧️</span>
+                    <span class="label">Pluie</span>
+                </button>
+                <button class="sound-btn" data-sound="wind">
+                    <span class="icon">🌬️</span>
+                    <span class="label">Vent</span>
+                </button>
+                <button class="sound-btn" data-sound="forest">
+                    <span class="icon">🌲</span>
+                    <span class="label">Forêt</span>
+                </button>
+                <button class="sound-btn" data-sound="cafe">
+                    <span class="icon">☕</span>
+                    <span class="label">Café</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- Section Décision : Tirage au sort -->
+        <section id="section-decision" class="hidden">
+            <div class="decision-container">
+                <div class="input-group">
+                    <input type="text" id="option-input" placeholder="Ex: Pizza, Burger...">
+                    <button id="add-option">Ajouter</button>
+                </div>
+                <ul id="options-list"></ul>
+                <button id="draw-btn" class="primary-btn">Tirer au sort</button>
+                <div id="result-display" class="result-container"></div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 ZenDecision</p>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="script.js"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js');
+            });
+        }
+    </script>
+    <!-- Script de monétisation -->
+    <script src="https://pl28725493.profitablecpmratenetwork.com/92/24/15/922415557c0b2e238f75d831946ca7cc.js"></script>
+</body>
+</html>
