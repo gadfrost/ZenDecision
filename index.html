@@ -6,57 +6,92 @@
     <title>ZenDecision - Focus & Décision</title>
     <link rel="stylesheet" href="style.css">
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#2c3e50">
+    <meta name="theme-color" content="#1a1a2e">
     <link rel="apple-touch-icon" href="assets/icon-192.png">
 </head>
 <body>
     <header>
-        <h1>ZenDecision</h1>
-        <nav>
-            <button id="tab-focus" class="active">Focus</button>
-            <button id="tab-decision">Décision</button>
+        <div class="header-content">
+            <h1 class="logo">
+                <span class="logo-icon">✨</span>
+                ZenDecision
+            </h1>
+            <button id="install-btn" class="install-btn" style="display: none;">
+                <span>📱 Installer</span>
+            </button>
+        </div>
+        <nav class="tab-nav">
+            <button id="tab-focus" class="tab-btn active" data-tab="focus">
+                <span class="tab-icon">🎵</span>
+                <span>Focus</span>
+            </button>
+            <button id="tab-decision" class="tab-btn" data-tab="decision">
+                <span class="tab-icon">🎲</span>
+                <span>Décision</span>
+            </button>
         </nav>
     </header>
 
     <main>
         <!-- Section Focus : Sons d'ambiance -->
-        <section id="section-focus">
-            <div class="sound-grid">
-                <button class="sound-btn" data-sound="rain">
-                    <span class="icon">🌧️</span>
-                    <span class="label">Pluie</span>
-                </button>
-                <button class="sound-btn" data-sound="wind">
-                    <span class="icon">🌬️</span>
-                    <span class="label">Vent</span>
-                </button>
-                <button class="sound-btn" data-sound="forest">
-                    <span class="icon">🌲</span>
-                    <span class="label">Forêt</span>
-                </button>
-                <button class="sound-btn" data-sound="cafe">
-                    <span class="icon">☕</span>
-                    <span class="label">Café</span>
-                </button>
+        <section id="section-focus" class="tab-content active">
+            <div class="focus-intro">
+                <h2>Créez votre ambiance parfaite</h2>
+                <p>Mélangez plusieurs sons pour une expérience personnalisée</p>
+            </div>
+
+            <!-- Sélecteur de catégories -->
+            <div class="category-selector">
+                <button class="category-btn active" data-category="nature">🌿 Nature</button>
+                <button class="category-btn" data-category="ambiance">🏠 Ambiance</button>
+                <button class="category-btn" data-category="urbain">🏙️ Urbain</button>
+                <button class="category-btn" data-category="relaxation">🧘 Relaxation</button>
+            </div>
+
+            <!-- Grille de sons par catégorie -->
+            <div class="sound-grid" id="sound-grid">
+                <!-- Les sons seront générés par JavaScript -->
+            </div>
+
+            <!-- Contrôle de volume global -->
+            <div class="volume-control">
+                <label for="master-volume">Volume général</label>
+                <div class="volume-slider-wrapper">
+                    <span>🔇</span>
+                    <input type="range" id="master-volume" min="0" max="100" value="70" class="volume-slider">
+                    <span>🔊</span>
+                </div>
+            </div>
+
+            <!-- Indicateur de sons actifs -->
+            <div class="active-sounds">
+                <h3>Sons actifs</h3>
+                <div id="active-sounds-list" class="active-sounds-list"></div>
             </div>
         </section>
 
         <!-- Section Décision : Tirage au sort -->
-        <section id="section-decision" class="hidden">
+        <section id="section-decision" class="tab-content">
+            <div class="decision-intro">
+                <h2>Laissez le hasard décider</h2>
+                <p>Ajoutez vos options et tirez au sort</p>
+            </div>
             <div class="decision-container">
                 <div class="input-group">
-                    <input type="text" id="option-input" placeholder="Ex: Pizza, Burger...">
-                    <button id="add-option">Ajouter</button>
+                    <input type="text" id="option-input" placeholder="Ex: Pizza, Burger, Sushi...">
+                    <button id="add-option" class="add-btn">Ajouter</button>
                 </div>
-                <ul id="options-list"></ul>
-                <button id="draw-btn" class="primary-btn">Tirer au sort</button>
+                <div class="options-wrapper">
+                    <ul id="options-list"></ul>
+                </div>
+                <button id="draw-btn" class="draw-btn">🎲 Tirer au sort</button>
                 <div id="result-display" class="result-container"></div>
             </div>
         </section>
     </main>
 
     <footer>
-        <p>&copy; 2026 ZenDecision</p>
+        <p>ZenDecision © 2026 | Trouvez votre zen</p>
     </footer>
 
     <!-- Scripts -->
@@ -64,7 +99,7 @@
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('sw.js');
+                navigator.serviceWorker.register('sw.js').catch(err => console.log("SW registration failed", err));
             });
         }
     </script>
