@@ -129,8 +129,13 @@ function toggleSound(sound, btn) {
         audio.volume = (appState.masterVolume / 100) * 0.7; // 70% du volume général
         
         audio.play().catch(err => {
-            console.log("Audio play blocked:", err);
-            alert('Impossible de lire le son. Vérifiez votre connexion.');
+            console.log("Audio play error:", err);
+            // Si le son ne peut pas être lu, on informe l'utilisateur discrètement
+            const indicator = btn.querySelector('.indicator');
+            if (indicator) {
+                indicator.style.backgroundColor = '#ff4b2b';
+                setTimeout(() => indicator.style.backgroundColor = '', 2000);
+            }
         });
         
         appState.activeSounds[soundKey] = {
