@@ -40,12 +40,17 @@
                 <p>Mélangez plusieurs sons pour une expérience personnalisée</p>
             </div>
 
-            <!-- Sélecteur de catégories -->
-            <div class="category-selector">
-                <button class="category-btn active" data-category="nature">🌿 Nature</button>
-                <button class="category-btn" data-category="ambiance">🏠 Ambiance</button>
-                <button class="category-btn" data-category="urbain">🏙️ Urbain</button>
-                <button class="category-btn" data-category="relaxation">🧘 Relaxation</button>
+            <!-- Sélecteur de catégories et Bouton Aléatoire -->
+            <div class="focus-controls">
+                <div class="category-selector">
+                    <button class="category-btn active" data-category="nature">🌿 Nature</button>
+                    <button class="category-btn" data-category="ambiance">🏠 Ambiance</button>
+                    <button class="category-btn" data-category="urbain">🏙️ Urbain</button>
+                    <button class="category-btn" data-category="relaxation">🧘 Relaxation</button>
+                </div>
+                <button id="random-sound-btn" class="random-btn" title="Choisir un son aléatoirement">
+                    <span class="dice-icon">🎲</span>
+                </button>
             </div>
 
             <!-- Grille de sons par catégorie -->

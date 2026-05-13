@@ -89,6 +89,74 @@ function initializeApp() {
 
     // Initialiser la section Décision
     initializeDecisionSection();
+    
+    // Initialiser le bouton aléatoire
+    setupRandomSoundButton();
+}
+
+function setupRandomSoundButton() {
+    const randomBtn = document.getElementById('random-sound-btn');
+    if (!randomBtn) return;
+
+    randomBtn.addEventListener('click', () => {
+        // Animation de roulement
+        randomBtn.classList.add('rolling');
+        
+        // Désactiver temporairement pour éviter le spam
+        randomBtn.disabled = true;
+
+        setTimeout(() => {
+            randomBtn.classList.remove('rolling');
+            randomBtn.disabled = false;
+            
+            playRandomSound();
+        }, 1000);
+    });
+}
+
+function playRandomSound() {
+    // Récupérer toutes les catégories
+    const categories = Object.keys(soundsData);
+    // Choisir une catégorie aléatoire
+    const randomCategory = categories[Math.floor(Math.random() * categories.length)];
+    // Récupérer les sons de cette catégorie
+    const sounds = soundsData[randomCategory];
+    // Choisir un son aléatoire
+    const randomSound = sounds[Math.floor(Math.random() * sounds.length)];
+    
+    // Changer de catégorie visuellement si nécessaire
+    if (appState.currentCategory !== randomCategory) {
+        appState.currentCategory = randomCategory;
+        categoryButtons.forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.category === randomCategory);
+        });
+        renderSounds(randomCategory);
+    }
+    
+    // Trouver le bouton du son dans la grille et simuler un clic
+    // (ou appeler toggleSound directement)
+    const soundKey = `${randomCategory}-${randomSound.file}`;
+    
+    // Si le son est déjà actif, on ne fait rien ou on le relance ? 
+    // L'utilisateur veut "choisir un son", donc on va s'assurer qu'il joue.
+    if (!appState.activeSounds[soundKey]) {
+        // On cherche le bouton correspondant dans le DOM pour l'effet visuel
+        const buttons = document.querySelectorAll('.sound-btn');
+        let targetBtn = null;
+        buttons.forEach(btn => {
+            if (btn.querySelector('.label').textContent === randomSound.name) {
+                targetBtn = btn;
+            }
+        });
+        
+        toggleSound(randomSound, targetBtn);
+        
+        // Petit effet visuel sur le bouton sélectionné
+        if (targetBtn) {
+            targetBtn.style.transform = 'scale(1.1)';
+            setTimeout(() => targetBtn.style.transform = '', 300);
+        }
+    }
 }
 
 function renderSounds(category) {

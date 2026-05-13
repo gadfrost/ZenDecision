@@ -1,13 +1,13 @@
 :root {
-    --primary-dark: #0f0f1e;
-    --secondary-dark: #1a1a2e;
-    --accent-blue: #00d4ff;
-    --accent-purple: #a855f7;
-    --accent-pink: #ec4899;
-    --accent-green: #10b981;
-    --text-light: #f0f4f8;
-    --text-muted: #a0aec0;
-    --border-color: rgba(255, 255, 255, 0.1);
+    --primary-dark: #1e1e2f;
+    --secondary-dark: #2a2a40;
+    --accent-blue: #4facfe;
+    --accent-purple: #9b6dff;
+    --accent-pink: #f78ca0;
+    --accent-green: #43e97b;
+    --text-light: #f8f9fa;
+    --text-muted: #cbd5e0;
+    --border-color: rgba(255, 255, 255, 0.15);
 }
 
 * {
@@ -178,13 +178,58 @@ main {
     font-size: 1rem;
 }
 
+/* Focus Controls */
+.focus-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+}
+
 /* Category Selector */
 .category-selector {
     display: flex;
     gap: 1rem;
     justify-content: center;
-    margin-bottom: 2rem;
     flex-wrap: wrap;
+}
+
+.random-btn {
+    background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink));
+    border: none;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 15px rgba(168, 85, 247, 0.3);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.random-btn:hover {
+    transform: scale(1.1) rotate(15deg);
+    box-shadow: 0 6px 20px rgba(168, 85, 247, 0.5);
+}
+
+.random-btn:active {
+    transform: scale(0.9);
+}
+
+.dice-icon {
+    font-size: 1.5rem;
+}
+
+.rolling {
+    animation: roll 0.6s infinite linear;
+}
+
+@keyframes roll {
+    0% { transform: rotate(0deg) scale(1.1); }
+    100% { transform: rotate(360deg) scale(1.1); }
 }
 
 .category-btn {
