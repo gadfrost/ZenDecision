@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZenDecision - Focus & Décision</title>
+    <title>ZenDecision - Focus & Ambiance</title>
     <link rel="stylesheet" href="style.css">
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#1a1a2e">
@@ -20,16 +20,7 @@
                 <span>📱 Installer</span>
             </button>
         </div>
-        <nav class="tab-nav">
-            <button id="tab-focus" class="tab-btn active" data-tab="focus">
-                <span class="tab-icon">🎵</span>
-                <span>Focus</span>
-            </button>
-            <button id="tab-decision" class="tab-btn" data-tab="decision">
-                <span class="tab-icon">🎲</span>
-                <span>Décision</span>
-            </button>
-        </nav>
+        <!-- Navigation supprimée car il n'y a plus qu'une seule section -->
     </header>
 
     <main>
@@ -75,24 +66,7 @@
             </div>
         </section>
 
-        <!-- Section Décision : Tirage au sort -->
-        <section id="section-decision" class="tab-content">
-            <div class="decision-intro">
-                <h2>Laissez le hasard décider</h2>
-                <p>Ajoutez vos options et tirez au sort</p>
-            </div>
-            <div class="decision-container">
-                <div class="input-group">
-                    <input type="text" id="option-input" placeholder="Ex: Pizza, Burger, Sushi...">
-                    <button id="add-option" class="add-btn">Ajouter</button>
-                </div>
-                <div class="options-wrapper">
-                    <ul id="options-list"></ul>
-                </div>
-                <button id="draw-btn" class="draw-btn">🎲 Tirer au sort</button>
-                <div id="result-display" class="result-container"></div>
-            </div>
-        </section>
+
     </main>
 
     <footer>

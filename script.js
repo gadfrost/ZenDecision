@@ -70,16 +70,7 @@ function initializeApp() {
         });
     });
 
-    // Ajouter les écouteurs des onglets
-    tabButtons.forEach(btn => {
-        btn.addEventListener('click', () => {
-            const tabName = btn.dataset.tab;
-            tabButtons.forEach(b => b.classList.remove('active'));
-            tabContents.forEach(c => c.classList.remove('active'));
-            btn.classList.add('active');
-            document.getElementById(`section-${tabName}`).classList.add('active');
-        });
-    });
+
 
     // Contrôle du volume général
     masterVolumeSlider.addEventListener('input', (e) => {
@@ -87,8 +78,7 @@ function initializeApp() {
         updateAllSoundVolumes();
     });
 
-    // Initialiser la section Décision
-    initializeDecisionSection();
+
     
     // Initialiser le bouton aléatoire
     setupRandomSoundButton();
@@ -260,70 +250,7 @@ function updateActiveSoundsList() {
     }
 }
 
-// --- Section Décision ---
-function initializeDecisionSection() {
-    const optionInput = document.getElementById('option-input');
-    const addOptionBtn = document.getElementById('add-option');
-    const optionsList = document.getElementById('options-list');
-    const drawBtn = document.getElementById('draw-btn');
-    const resultDisplay = document.getElementById('result-display');
 
-    let options = [];
-
-    function updateOptionsList() {
-        optionsList.innerHTML = '';
-        options.forEach((opt, index) => {
-            const li = document.createElement('li');
-            li.innerHTML = `
-                <span>${opt}</span>
-                <button class="remove-btn" data-index="${index}">&times;</button>
-            `;
-            optionsList.appendChild(li);
-        });
-
-        document.querySelectorAll('.remove-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                const index = e.target.getAttribute('data-index');
-                options.splice(index, 1);
-                updateOptionsList();
-            });
-        });
-
-        drawBtn.disabled = options.length < 2;
-    }
-
-    addOptionBtn.addEventListener('click', () => {
-        const val = optionInput.value.trim();
-        if (val) {
-            options.push(val);
-            optionInput.value = '';
-            updateOptionsList();
-        }
-    });
-
-    optionInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') addOptionBtn.click();
-    });
-
-    drawBtn.addEventListener('click', () => {
-        if (options.length < 2) {
-            resultDisplay.textContent = "Ajoutez au moins 2 options !";
-            resultDisplay.classList.remove('success');
-            resultDisplay.classList.add('error');
-            return;
-        }
-
-        resultDisplay.textContent = "Tirage en cours...";
-        resultDisplay.classList.remove('success', 'error');
-
-        setTimeout(() => {
-            const randomIndex = Math.floor(Math.random() * options.length);
-            const winner = options[randomIndex];
-            resultDisplay.textContent = `🎉 ${winner}`;
-            resultDisplay.classList.add('success');
-        }, 800);
-    });
-}
 
 // --- Installation PWA ---
 function setupInstallPrompt() {
