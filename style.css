@@ -1,13 +1,13 @@
 :root {
-    --primary-dark: #1e1e2f;
-    --secondary-dark: #2a2a40;
-    --accent-blue: #4facfe;
-    --accent-purple: #9b6dff;
+    --primary-dark: #f0f2f5;
+    --secondary-dark: #e4e7eb;
+    --accent-blue: #56ccf2;
+    --accent-blue-soft: #2f80ed;
     --accent-pink: #f78ca0;
     --accent-green: #43e97b;
-    --text-light: #f8f9fa;
-    --text-muted: #cbd5e0;
-    --border-color: rgba(255, 255, 255, 0.15);
+    --text-light: #2d3748;
+    --text-muted: #718096;
+    --border-color: rgba(0, 0, 0, 0.1);
 }
 
 * {
@@ -35,11 +35,11 @@ body {
 
 /* Header */
 header {
-    background: linear-gradient(180deg, rgba(26, 26, 46, 0.95) 0%, rgba(15, 15, 30, 0.8) 100%);
+    background: rgba(255, 255, 255, 0.8);
     padding: 1.5rem 1rem;
     backdrop-filter: blur(10px);
     border-bottom: 1px solid var(--border-color);
-    box-shadow: 0 8px 32px rgba(0, 212, 255, 0.1);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
 }
 
 .header-content {
@@ -52,7 +52,7 @@ header {
 .logo {
     font-size: 1.8rem;
     font-weight: 700;
-    background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+    background: linear-gradient(135deg, var(--accent-blue), var(--accent-blue-soft));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -167,7 +167,7 @@ main {
 .focus-intro h2 {
     font-size: 1.8rem;
     margin-bottom: 0.5rem;
-    background: linear-gradient(135deg, var(--accent-blue), var(--accent-pink));
+    background: linear-gradient(135deg, var(--accent-blue), var(--accent-blue-soft));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -197,7 +197,7 @@ main {
 }
 
 .random-btn {
-    background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink));
+    background: linear-gradient(135deg, var(--accent-blue), var(--accent-blue-soft));
     border: none;
     width: 50px;
     height: 50px;
@@ -206,13 +206,13 @@ main {
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 4px 15px rgba(168, 85, 247, 0.3);
+    box-shadow: 0 4px 15px rgba(86, 204, 242, 0.3);
     transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .random-btn:hover {
     transform: scale(1.1) rotate(15deg);
-    box-shadow: 0 6px 20px rgba(168, 85, 247, 0.5);
+    box-shadow: 0 6px 20px rgba(86, 204, 242, 0.5);
 }
 
 .random-btn:active {
@@ -233,7 +233,7 @@ main {
 }
 
 .category-btn {
-    background: rgba(255, 255, 255, 0.05);
+    background: white;
     border: 2px solid var(--border-color);
     color: var(--text-light);
     padding: 0.6rem 1.2rem;
@@ -250,9 +250,10 @@ main {
 }
 
 .category-btn.active {
-    background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+    background: linear-gradient(135deg, var(--accent-blue), var(--accent-blue-soft));
     border-color: var(--accent-blue);
-    box-shadow: 0 0 15px rgba(0, 212, 255, 0.3);
+    color: white;
+    box-shadow: 0 0 15px rgba(86, 204, 242, 0.3);
 }
 
 /* Sound Grid */
@@ -265,7 +266,7 @@ main {
 
 .sound-btn {
     position: relative;
-    background: rgba(255, 255, 255, 0.05);
+    background: white;
     border: 2px solid var(--border-color);
     border-radius: 15px;
     padding: 1.2rem 0.8rem;
@@ -277,6 +278,7 @@ main {
     transition: all 0.3s ease;
     min-height: 140px;
     overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.02);
 }
 
 .sound-btn-bg {
@@ -285,7 +287,7 @@ main {
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+    background: linear-gradient(135deg, var(--accent-blue), var(--accent-blue-soft));
     opacity: 0;
     transition: opacity 0.3s ease;
     z-index: -1;
@@ -363,11 +365,12 @@ main {
 
 /* Volume Control */
 .volume-control {
-    background: rgba(255, 255, 255, 0.05);
+    background: white;
     border: 1px solid var(--border-color);
     padding: 1.5rem;
     border-radius: 15px;
     margin-bottom: 2rem;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.02);
 }
 
 .volume-control label {
@@ -400,28 +403,29 @@ main {
     width: 18px;
     height: 18px;
     border-radius: 50%;
-    background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+    background: linear-gradient(135deg, var(--accent-blue), var(--accent-blue-soft));
     cursor: pointer;
-    box-shadow: 0 2px 8px rgba(0, 212, 255, 0.3);
+    box-shadow: 0 2px 8px rgba(86, 204, 242, 0.3);
 }
 
 .volume-slider::-moz-range-thumb {
     width: 18px;
     height: 18px;
     border-radius: 50%;
-    background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+    background: linear-gradient(135deg, var(--accent-blue), var(--accent-blue-soft));
     cursor: pointer;
     border: none;
-    box-shadow: 0 2px 8px rgba(0, 212, 255, 0.3);
+    box-shadow: 0 2px 8px rgba(86, 204, 242, 0.3);
 }
 
 /* Active Sounds */
 .active-sounds {
-    background: rgba(255, 255, 255, 0.05);
+    background: white;
     border: 1px solid var(--border-color);
     padding: 1.5rem;
     border-radius: 15px;
     margin-bottom: 2rem;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.02);
 }
 
 .active-sounds h3 {
@@ -436,7 +440,8 @@ main {
 }
 
 .active-sound-tag {
-    background: linear-gradient(135deg, var(--accent-green), var(--accent-blue));
+    background: linear-gradient(135deg, var(--accent-blue), var(--accent-blue-soft));
+    color: white;
     padding: 0.5rem 1rem;
     border-radius: 20px;
     font-size: 0.9rem;
