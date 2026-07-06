@@ -1,28 +1,28 @@
 // ============================================
-// ZenDecision - Script Amélioré
-// Gestion des sons d'ambiance par catégorie
+// ZenDecision - Script Principal
+// Gestion des sons, PWA et Mode Sombre
 // ============================================
 
 // Données des sons organisées par ambiance
 const soundsData = {
     sommeil: [
-        { name: 'Bruit Rose', icon: '🌙', file: 'pink_noise', description: 'Doux et apaisant' },
-        { name: 'Bruit Brun', icon: '🌊', file: 'brown_noise', description: 'Profond et relaxant' },
-        { name: 'Pluie Douce', icon: '🌧️', file: 'rain_ambient', description: 'Classique pour dormir' },
-        { name: 'Vagues Nocturnes', icon: '🌙', file: 'ocean_waves_night', description: 'Rythme régulier' },
+        { name: 'Bruit Rose', icon: '🌙', file: 'pink_noise' },
+        { name: 'Bruit Brun', icon: '🌊', file: 'brown_noise' },
+        { name: 'Pluie Douce', icon: '🌧️', file: 'rain_ambient' },
+        { name: 'Vagues Nocturnes', icon: '🌊', file: 'ocean_waves_night' },
     ],
     etude: [
-        { name: 'Lo-Fi Study', icon: '📚', file: 'lofi_study', description: 'Musique calme' },
-        { name: 'Forêt Calme', icon: '🌲', file: 'forest_calm', description: 'Nature apaisante' },
-        { name: 'Pluie Fenêtre', icon: '🪟', file: 'rain_window', description: 'Isolant du bruit' },
+        { name: 'Lo-Fi Study', icon: '📚', file: 'lofi_study' },
+        { name: 'Forêt Calme', icon: '🌲', file: 'forest_calm' },
+        { name: 'Pluie Fenêtre', icon: '🪟', file: 'rain_window' },
     ],
     joie: [
-        { name: 'Oiseaux Matinaux', icon: '🐦', file: 'morning_birds', description: 'Énergie positive' },
-        { name: 'Forêt Printanière', icon: '🌸', file: 'forest_spring', description: 'Fraîcheur naturelle' },
+        { name: 'Oiseaux Matinaux', icon: '🐦', file: 'morning_birds' },
+        { name: 'Forêt Printanière', icon: '🌸', file: 'forest_spring' },
     ],
     promenade: [
-        { name: 'Vagues Océan', icon: '🌊', file: 'ocean_waves', description: 'Majestueux' },
-        { name: 'Forêt Marche', icon: '🥾', file: 'forest_walk', description: 'Immersion nature' },
+        { name: 'Vagues Océan', icon: '🌊', file: 'ocean_waves' },
+        { name: 'Forêt Marche', icon: '🥾', file: 'forest_walk' },
     ],
 };
 
@@ -31,7 +31,8 @@ let appState = {
     currentCategory: 'sommeil',
     activeSounds: {},
     masterVolume: 70,
-    installPrompt: null
+    installPrompt: null,
+    darkMode: false
 };
 
 // Éléments du DOM
@@ -40,12 +41,55 @@ const categoryButtons = document.querySelectorAll('.category-btn');
 const masterVolumeSlider = document.getElementById('master-volume');
 const activeSoundsList = document.getElementById('active-sounds-list');
 const installBtn = document.getElementById('install-btn');
+const themeToggle = document.getElementById('theme-toggle');
 
 // Initialisation
 document.addEventListener('DOMContentLoaded', () => {
+    initializeTheme();
     initializeApp();
     setupInstallPrompt();
+    setupThemeToggle();
 });
+
+// ============================================
+// GESTION DU THÈME (Mode Sombre/Clair)
+// ============================================
+
+function initializeTheme() {
+    // Vérifier les préférences sauvegardées
+    const savedTheme = localStorage.getItem('zen-theme');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    
+    appState.darkMode = savedTheme ? savedTheme === 'dark' : prefersDark;
+    
+    applyTheme(appState.darkMode);
+}
+
+function applyTheme(isDark) {
+    const body = document.body;
+    const themeBtn = document.getElementById('theme-toggle');
+    
+    if (isDark) {
+        body.classList.add('dark-mode');
+        themeBtn.textContent = '☀️';
+        localStorage.setItem('zen-theme', 'dark');
+    } else {
+        body.classList.remove('dark-mode');
+        themeBtn.textContent = '🌙';
+        localStorage.setItem('zen-theme', 'light');
+    }
+}
+
+function setupThemeToggle() {
+    themeToggle.addEventListener('click', () => {
+        appState.darkMode = !appState.darkMode;
+        applyTheme(appState.darkMode);
+    });
+}
+
+// ============================================
+// INITIALISATION DE L'APPLICATION
+// ============================================
 
 function initializeApp() {
     // Rendre les sons pour la catégorie actuelle
@@ -71,37 +115,32 @@ function initializeApp() {
     setupRandomSoundButton();
 }
 
+// ============================================
+// GESTION DU BOUTON ALÉATOIRE
+// ============================================
+
 function setupRandomSoundButton() {
     const randomBtn = document.getElementById('random-sound-btn');
     if (!randomBtn) return;
 
     randomBtn.addEventListener('click', () => {
-        // Animation de roulement
         randomBtn.classList.add('rolling');
-        
-        // Désactiver temporairement pour éviter le spam
         randomBtn.disabled = true;
 
         setTimeout(() => {
             randomBtn.classList.remove('rolling');
             randomBtn.disabled = false;
-            
             playRandomSound();
         }, 800);
     });
 }
 
 function playRandomSound() {
-    // Récupérer toutes les catégories
     const categories = Object.keys(soundsData);
-    // Choisir une catégorie aléatoire
     const randomCategory = categories[Math.floor(Math.random() * categories.length)];
-    // Récupérer les sons de cette catégorie
     const sounds = soundsData[randomCategory];
-    // Choisir un son aléatoire
     const randomSound = sounds[Math.floor(Math.random() * sounds.length)];
     
-    // Changer de catégorie visuellement si nécessaire
     if (appState.currentCategory !== randomCategory) {
         appState.currentCategory = randomCategory;
         categoryButtons.forEach(btn => {
@@ -110,12 +149,9 @@ function playRandomSound() {
         renderSounds(randomCategory);
     }
     
-    // Trouver le bouton du son dans la grille et simuler un clic
     const soundKey = `${randomCategory}-${randomSound.file}`;
     
-    // Si le son est déjà actif, on ne fait rien ou on le relance
     if (!appState.activeSounds[soundKey]) {
-        // On cherche le bouton correspondant dans le DOM pour l'effet visuel
         const buttons = document.querySelectorAll('.sound-btn');
         let targetBtn = null;
         buttons.forEach(btn => {
@@ -126,13 +162,16 @@ function playRandomSound() {
         
         toggleSound(randomSound, randomCategory, targetBtn);
         
-        // Petit effet visuel sur le bouton sélectionné
         if (targetBtn) {
             targetBtn.style.transform = 'scale(1.05)';
             setTimeout(() => targetBtn.style.transform = '', 300);
         }
     }
 }
+
+// ============================================
+// RENDU DES SONS
+// ============================================
 
 function renderSounds(category) {
     soundGrid.innerHTML = '';
@@ -147,7 +186,6 @@ function renderSounds(category) {
             <span class="indicator"></span>
         `;
         
-        // Animation d'entrée échelonnée
         btn.style.animation = `fadeIn 0.6s ease ${index * 0.05}s both`;
         
         btn.addEventListener('click', () => {
@@ -157,6 +195,10 @@ function renderSounds(category) {
         soundGrid.appendChild(btn);
     });
 }
+
+// ============================================
+// GESTION DES SONS
+// ============================================
 
 function toggleSound(sound, category, btn) {
     const soundKey = `${category}-${sound.file}`;
@@ -174,7 +216,6 @@ function toggleSound(sound, category, btn) {
         
         audio.play().catch(err => {
             console.log("Erreur de lecture audio:", err);
-            // Afficher un indicateur d'erreur
             const indicator = btn.querySelector('.indicator');
             if (indicator) {
                 indicator.style.backgroundColor = '#ef4444';
@@ -223,7 +264,7 @@ function updateActiveSoundsList() {
                 sound.audio.pause();
                 delete appState.activeSounds[key];
                 updateActiveSoundsList();
-                // Mettre à jour l'apparence du bouton
+                
                 const buttons = document.querySelectorAll('.sound-btn.playing');
                 buttons.forEach(btn => {
                     if (btn.querySelector('.label').textContent === sound.name) {
@@ -237,13 +278,16 @@ function updateActiveSoundsList() {
     }
 }
 
-// --- Installation PWA ---
+// ============================================
+// GESTION PWA (Installation Progressive Web App)
+// ============================================
+
 function setupInstallPrompt() {
     window.addEventListener('beforeinstallprompt', (e) => {
         e.preventDefault();
         appState.installPrompt = e;
         if (installBtn) {
-            installBtn.style.display = 'block';
+            installBtn.style.display = 'flex';
         }
     });
 
@@ -255,7 +299,7 @@ function setupInstallPrompt() {
             const { outcome } = await appState.installPrompt.userChoice;
             
             if (outcome === 'accepted') {
-                console.log('PWA installée');
+                console.log('PWA installée avec succès');
             }
             
             appState.installPrompt = null;
@@ -270,3 +314,21 @@ function setupInstallPrompt() {
         }
     });
 }
+
+// ============================================
+// GESTION DE LA VISIBILITÉ
+// ============================================
+
+document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+        // Réduire le volume quand l'app est en arrière-plan
+        Object.keys(appState.activeSounds).forEach(key => {
+            appState.activeSounds[key].audio.volume = (appState.masterVolume / 100) * 0.4;
+        });
+    } else {
+        // Restaurer le volume quand l'app revient au premier plan
+        Object.keys(appState.activeSounds).forEach(key => {
+            appState.activeSounds[key].audio.volume = (appState.masterVolume / 100) * 0.8;
+        });
+    }
+});

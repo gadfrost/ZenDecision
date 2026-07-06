@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ZenDecision - Ambiances Sonores pour Votre Bien-Être</title>
-    <link rel="stylesheet" href="style_new.css">
+    <link rel="stylesheet" href="style.css">
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#6366f1">
+    <meta name="theme-color" content="#7c3aed">
     <meta name="description" content="Créez votre ambiance parfaite avec ZenDecision. Sons pour le sommeil, l'étude, la joie et la détente.">
     <link rel="apple-touch-icon" href="assets/icon-192.png">
 </head>
@@ -17,9 +17,15 @@
                 <span class="logo-icon">✨</span>
                 ZenDecision
             </h1>
-            <button id="install-btn" class="install-btn" style="display: none;">
-                <span>📲 Installer l'App</span>
-            </button>
+            <div class="header-controls">
+                <button id="install-btn" class="install-btn" style="display: none;" title="Installer ZenDecision sur votre appareil">
+                    <span>📲</span>
+                    <span>Installer</span>
+                </button>
+                <button id="theme-toggle" class="theme-toggle" title="Basculer entre le mode clair et sombre">
+                    🌙
+                </button>
+            </div>
         </div>
     </header>
 
@@ -72,7 +78,7 @@
     </footer>
 
     <!-- Scripts -->
-    <script src="script_new.js"></script>
+    <script src="script.js"></script>
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
