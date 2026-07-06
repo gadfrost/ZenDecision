@@ -1,7 +1,7 @@
 {
   "name": "ZenDecision",
   "short_name": "ZenDecision",
-  "description": "Ambiance sonore immersive et outil de décision",
+  "description": "Créez votre ambiance parfaite avec ZenDecision. Sons pour le sommeil, l'étude, la joie et la détente.",
   "start_url": "index.html",
   "display": "standalone",
   "background_color": "#0f0f1e",

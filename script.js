@@ -205,7 +205,9 @@ function toggleSound(sound, category, btn) {
     
     if (appState.activeSounds[soundKey]) {
         // Arrêter le son
-        appState.activeSounds[soundKey].audio.pause();
+        const audioElement = appState.activeSounds[soundKey].audio;
+        audioElement.pause();
+        audioElement.currentTime = 0;
         delete appState.activeSounds[soundKey];
         btn.classList.remove('playing');
     } else {
@@ -214,13 +216,31 @@ function toggleSound(sound, category, btn) {
         audio.loop = true;
         audio.volume = (appState.masterVolume / 100) * 0.8;
         
-        audio.play().catch(err => {
-            console.log("Erreur de lecture audio:", err);
+        // Ajouter des écouteurs pour gérer les erreurs
+        audio.addEventListener('error', (e) => {
+            console.error(`Erreur de chargement audio pour ${sound.file}:`, e);
             const indicator = btn.querySelector('.indicator');
             if (indicator) {
                 indicator.style.backgroundColor = '#ef4444';
                 setTimeout(() => indicator.style.backgroundColor = '', 2000);
             }
+            // Nettoyer l'état
+            delete appState.activeSounds[soundKey];
+            btn.classList.remove('playing');
+            updateActiveSoundsList();
+        });
+        
+        audio.play().catch(err => {
+            console.error("Erreur de lecture audio:", err);
+            const indicator = btn.querySelector('.indicator');
+            if (indicator) {
+                indicator.style.backgroundColor = '#ef4444';
+                setTimeout(() => indicator.style.backgroundColor = '', 2000);
+            }
+            // Nettoyer l'état en cas d'erreur
+            delete appState.activeSounds[soundKey];
+            btn.classList.remove('playing');
+            updateActiveSoundsList();
         });
         
         appState.activeSounds[soundKey] = {
@@ -323,12 +343,30 @@ document.addEventListener('visibilitychange', () => {
     if (document.hidden) {
         // Réduire le volume quand l'app est en arrière-plan
         Object.keys(appState.activeSounds).forEach(key => {
-            appState.activeSounds[key].audio.volume = (appState.masterVolume / 100) * 0.4;
+            if (appState.activeSounds[key] && appState.activeSounds[key].audio) {
+                appState.activeSounds[key].audio.volume = (appState.masterVolume / 100) * 0.4;
+            }
         });
     } else {
         // Restaurer le volume quand l'app revient au premier plan
         Object.keys(appState.activeSounds).forEach(key => {
-            appState.activeSounds[key].audio.volume = (appState.masterVolume / 100) * 0.8;
+            if (appState.activeSounds[key] && appState.activeSounds[key].audio) {
+                appState.activeSounds[key].audio.volume = (appState.masterVolume / 100) * 0.8;
+            }
         });
     }
+});
+
+// ============================================
+// NETTOYAGE DES RESSOURCES
+// ============================================
+
+// Arrêter tous les sons quand l'utilisateur quitte la page
+window.addEventListener('beforeunload', () => {
+    Object.keys(appState.activeSounds).forEach(key => {
+        if (appState.activeSounds[key] && appState.activeSounds[key].audio) {
+            appState.activeSounds[key].audio.pause();
+            appState.activeSounds[key].audio.currentTime = 0;
+        }
+    });
 });

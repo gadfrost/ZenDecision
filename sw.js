@@ -1,4 +1,4 @@
-const CACHE_NAME = 'zendecision-v2';
+const CACHE_NAME = 'zendecision-v3';
 const ASSETS = [
   './',
   './index.html',
@@ -7,39 +7,31 @@ const ASSETS = [
   './manifest.json',
   './assets/icon-192.png',
   './assets/icon-512.png',
-  // Fichiers audio - Nature
-  './assets/sounds/rain.mp3',
-  './assets/sounds/wind.mp3',
-  './assets/sounds/forest.mp3',
-  './assets/sounds/birds.mp3',
-  './assets/sounds/thunder.mp3',
-  './assets/sounds/waves.mp3',
-  './assets/sounds/stream.mp3',
-  // Fichiers audio - Ambiance
-  './assets/sounds/cafe.mp3',
-  './assets/sounds/library.mp3',
-  './assets/sounds/office.mp3',
-  './assets/sounds/restaurant.mp3',
-  './assets/sounds/fireplace.mp3',
-  './assets/sounds/market.mp3',
-  // Fichiers audio - Urbain
-  './assets/sounds/city.mp3',
-  './assets/sounds/traffic.mp3',
-  './assets/sounds/rain-city.mp3',
-  './assets/sounds/metro.mp3',
-  './assets/sounds/station.mp3',
-  // Fichiers audio - Relaxation
-  './assets/sounds/meditation.mp3',
-  './assets/sounds/spa.mp3',
-  './assets/sounds/tibetan.mp3',
-  './assets/sounds/singing-bowl.mp3',
-  './assets/sounds/white-noise.mp3'
+  // Fichiers audio - Sommeil
+  './assets/sounds/pink_noise.mp3',
+  './assets/sounds/brown_noise.mp3',
+  './assets/sounds/rain_ambient.mp3',
+  './assets/sounds/ocean_waves_night.mp3',
+  // Fichiers audio - Étude
+  './assets/sounds/lofi_study.mp3',
+  './assets/sounds/forest_calm.mp3',
+  './assets/sounds/rain_window.mp3',
+  // Fichiers audio - Joie
+  './assets/sounds/morning_birds.mp3',
+  './assets/sounds/forest_spring.mp3',
+  // Fichiers audio - Promenade
+  './assets/sounds/ocean_waves.mp3',
+  './assets/sounds/forest_walk.mp3'
 ];
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(ASSETS);
+      return cache.addAll(ASSETS).catch((error) => {
+        console.error('Cache installation failed:', error);
+        // Continue even if some assets fail to cache
+        return Promise.resolve();
+      });
     })
   );
 });
@@ -59,9 +51,31 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
-  event.respondWith(
-    caches.match(event.request).then((response) => {
-      return response || fetch(event.request);
-    })
-  );
+  // Pour les fichiers audio, utiliser une stratégie network-first
+  if (event.request.url.includes('/assets/sounds/')) {
+    event.respondWith(
+      fetch(event.request)
+        .then((response) => {
+          // Mettre en cache la réponse
+          if (response && response.status === 200) {
+            const responseToCache = response.clone();
+            caches.open(CACHE_NAME).then((cache) => {
+              cache.put(event.request, responseToCache);
+            });
+          }
+          return response;
+        })
+        .catch(() => {
+          // Utiliser la version en cache si disponible
+          return caches.match(event.request);
+        })
+    );
+  } else {
+    // Pour les autres ressources, utiliser cache-first
+    event.respondWith(
+      caches.match(event.request).then((response) => {
+        return response || fetch(event.request);
+      })
+    );
+  }
 });
