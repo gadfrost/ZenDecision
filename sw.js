@@ -1,4 +1,9 @@
-const CACHE_NAME = 'zendecision-v3';
+// ============================================
+// ZenDecision - Service Worker Corrigé
+// Optimisé pour les ressources externes
+// ============================================
+
+const CACHE_NAME = 'zendecision-v4';
 const ASSETS = [
   './',
   './index.html',
@@ -6,36 +11,19 @@ const ASSETS = [
   './script.js',
   './manifest.json',
   './assets/icon-192.png',
-  './assets/icon-512.png',
-  // Fichiers audio - Sommeil
-  './assets/sounds/pink_noise.mp3',
-  './assets/sounds/brown_noise.mp3',
-  './assets/sounds/rain_ambient.mp3',
-  './assets/sounds/ocean_waves_night.mp3',
-  // Fichiers audio - Étude
-  './assets/sounds/lofi_study.mp3',
-  './assets/sounds/forest_calm.mp3',
-  './assets/sounds/rain_window.mp3',
-  // Fichiers audio - Joie
-  './assets/sounds/morning_birds.mp3',
-  './assets/sounds/forest_spring.mp3',
-  // Fichiers audio - Promenade
-  './assets/sounds/ocean_waves.mp3',
-  './assets/sounds/forest_walk.mp3'
+  './assets/icon-512.png'
 ];
 
+// Installation : Mise en cache des fichiers principaux de l'interface
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(ASSETS).catch((error) => {
-        console.error('Cache installation failed:', error);
-        // Continue even if some assets fail to cache
-        return Promise.resolve();
-      });
+      return cache.addAll(ASSETS);
     })
   );
 });
 
+// Activation : Nettoyage des anciens caches
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((cacheNames) => {
@@ -50,32 +38,12 @@ self.addEventListener('activate', (event) => {
   );
 });
 
+// Fetch : Stratégie "Cache-first" pour l'interface
+// Les sons étant externes, ils sont gérés directement par le navigateur
 self.addEventListener('fetch', (event) => {
-  // Pour les fichiers audio, utiliser une stratégie network-first
-  if (event.request.url.includes('/assets/sounds/')) {
-    event.respondWith(
-      fetch(event.request)
-        .then((response) => {
-          // Mettre en cache la réponse
-          if (response && response.status === 200) {
-            const responseToCache = response.clone();
-            caches.open(CACHE_NAME).then((cache) => {
-              cache.put(event.request, responseToCache);
-            });
-          }
-          return response;
-        })
-        .catch(() => {
-          // Utiliser la version en cache si disponible
-          return caches.match(event.request);
-        })
-    );
-  } else {
-    // Pour les autres ressources, utiliser cache-first
-    event.respondWith(
-      caches.match(event.request).then((response) => {
-        return response || fetch(event.request);
-      })
-    );
-  }
+  event.respondWith(
+    caches.match(event.request).then((response) => {
+      return response || fetch(event.request);
+    })
+  );
 });
