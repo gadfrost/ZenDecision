@@ -1,5 +1,5 @@
 // ============================================
-// ZenDecision - Code complet avec 20 sons inclus
+// ZenDecision - Script Complet & Total
 // ============================================
 
 const soundsData = {
@@ -33,26 +33,108 @@ const soundsData = {
     ]
 };
 
-// Fonction de lecture corrigée pour utiliser les URLs
+let appState = { currentCategory: 'sommeil', activeSounds: {}, masterVolume: 70, installPrompt: null, darkMode: false };
+const soundGrid = document.getElementById('sound-grid');
+const categoryButtons = document.querySelectorAll('.category-btn');
+const masterVolumeSlider = document.getElementById('master-volume');
+const activeSoundsList = document.getElementById('active-sounds-list');
+const installBtn = document.getElementById('install-btn');
+const themeToggle = document.getElementById('theme-toggle');
+
+document.addEventListener('DOMContentLoaded', () => {
+    initializeTheme();
+    initializeApp();
+    setupInstallPrompt();
+    setupThemeToggle();
+});
+
+function initializeTheme() {
+    const savedTheme = localStorage.getItem('zen-theme');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    appState.darkMode = savedTheme ? savedTheme === 'dark' : prefersDark;
+    applyTheme(appState.darkMode);
+}
+
+function applyTheme(isDark) {
+    document.body.classList.toggle('dark-mode', isDark);
+    themeToggle.textContent = isDark ? '☀️' : '🌙';
+    localStorage.setItem('zen-theme', isDark ? 'dark' : 'light');
+}
+
+function setupThemeToggle() {
+    themeToggle.addEventListener('click', () => { appState.darkMode = !appState.darkMode; applyTheme(appState.darkMode); });
+}
+
+function initializeApp() {
+    renderSounds(appState.currentCategory);
+    categoryButtons.forEach(btn => btn.addEventListener('click', () => {
+        categoryButtons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        appState.currentCategory = btn.dataset.category;
+        renderSounds(appState.currentCategory);
+    }));
+    masterVolumeSlider.addEventListener('input', (e) => { appState.masterVolume = e.target.value; updateAllSoundVolumes(); });
+}
+
+function renderSounds(category) {
+    soundGrid.innerHTML = '';
+    soundsData[category].forEach((sound, index) => {
+        const btn = document.createElement('button');
+        btn.className = 'sound-btn';
+        btn.innerHTML = `<span class="icon">${sound.icon}</span><span class="label">${sound.name}</span><span class="indicator"></span>`;
+        btn.addEventListener('click', () => toggleSound(sound, category, btn));
+        soundGrid.appendChild(btn);
+    });
+}
+
 function toggleSound(sound, category, btn) {
     const soundKey = `${category}-${sound.name}`;
-    
     if (appState.activeSounds[soundKey]) {
         appState.activeSounds[soundKey].audio.pause();
         delete appState.activeSounds[soundKey];
         btn.classList.remove('playing');
     } else {
-        // Utilisation directe de l'URL fournie dans soundsData
         const audio = new Audio(sound.url);
         audio.loop = true;
         audio.volume = (appState.masterVolume / 100) * 0.8;
-        audio.play().catch(e => console.error("Erreur de lecture:", e));
-        
+        audio.play().catch(e => console.error(e));
         appState.activeSounds[soundKey] = { audio, name: sound.name, icon: sound.icon };
         btn.classList.add('playing');
     }
     updateActiveSoundsList();
 }
 
-// (Garde le reste de ton fichier script.js original ici : 
-// initializeApp, renderSounds, etc. car ils restent fonctionnels)
+function updateAllSoundVolumes() {
+    Object.keys(appState.activeSounds).forEach(key => appState.activeSounds[key].audio.volume = (appState.masterVolume / 100) * 0.8);
+}
+
+function updateActiveSoundsList() {
+    activeSoundsList.innerHTML = '';
+    Object.keys(appState.activeSounds).forEach(key => {
+        const sound = appState.activeSounds[key];
+        const tag = document.createElement('div');
+        tag.className = 'active-sound-tag';
+        tag.innerHTML = `<span>${sound.icon} ${sound.name}</span><span class="remove-sound">✕</span>`;
+        tag.querySelector('.remove-sound').addEventListener('click', () => {
+            sound.audio.pause();
+            delete appState.activeSounds[key];
+            updateActiveSoundsList();
+            renderSounds(appState.currentCategory);
+        });
+        activeSoundsList.appendChild(tag);
+    });
+}
+
+function setupInstallPrompt() {
+    window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        appState.installPrompt = e;
+        installBtn.style.display = 'flex';
+    });
+    installBtn.addEventListener('click', async () => {
+        if (!appState.installPrompt) return;
+        appState.installPrompt.prompt();
+        appState.installPrompt = null;
+        installBtn.style.display = 'none';
+    });
+}
