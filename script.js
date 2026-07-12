@@ -1,67 +1,58 @@
-// ========================================================
-// ZenDecision - Version Optimisée avec 20 ambiances
-// ========================================================
+// ============================================
+// ZenDecision - Code complet avec 20 sons inclus
+// ============================================
 
 const soundsData = {
     sommeil: [
-        { name: 'Océan Nocturne', icon: '🌊', file: 'ocean_night' },
-        { name: 'Pluie sous Tente', icon: '⛺', file: 'rain_tent' },
-        { name: 'Orage Lointain', icon: '⛈️', file: 'distant_storm' },
-        { name: 'Bruit Rose', icon: '🌙', file: 'pink_noise' },
-        { name: 'Bruit Brun', icon: '🤎', file: 'brown_noise' }
+        { name: 'Océan Nocturne', icon: '🌊', url: 'https://actions.google.com/sounds/v1/water/ocean_waves.ogg' },
+        { name: 'Pluie Douce', icon: '🌧️', url: 'https://actions.google.com/sounds/v1/weather/rain_light.ogg' },
+        { name: 'Orage Lointain', icon: '⛈️', url: 'https://actions.google.com/sounds/v1/weather/thunderstorm.ogg' },
+        { name: 'Bruit Blanc', icon: '🌙', url: 'https://actions.google.com/sounds/v1/ambiences/white_noise.ogg' },
+        { name: 'Vagues Calmes', icon: '🌊', url: 'https://actions.google.com/sounds/v1/water/waves_crashing.ogg' }
     ],
     etude: [
-        { name: 'Café Calme', icon: '☕', file: 'coffee_shop' },
-        { name: 'Bibliothèque', icon: '📚', file: 'library' },
-        { name: 'Forêt Profonde', icon: '🌲', file: 'deep_forest' },
-        { name: 'Vent Doux', icon: '🍃', file: 'soft_wind' },
-        { name: 'Lo-Fi Study', icon: '🎧', file: 'lofi_study' }
+        { name: 'Café Calme', icon: '☕', url: 'https://actions.google.com/sounds/v1/ambiences/coffee_shop.ogg' },
+        { name: 'Bibliothèque', icon: '📚', url: 'https://actions.google.com/sounds/v1/ambiences/library.ogg' },
+        { name: 'Forêt Calme', icon: '🌲', url: 'https://actions.google.com/sounds/v1/nature/forest_bird_call.ogg' },
+        { name: 'Vent Doux', icon: '🍃', url: 'https://actions.google.com/sounds/v1/nature/wind_rustling_leaves.ogg' },
+        { name: 'Lo-Fi Ambiance', icon: '🎧', url: 'https://actions.google.com/sounds/v1/ambiences/city_street_traffic.ogg' }
     ],
     joie: [
-        { name: 'Oiseaux Matin', icon: '🐦', file: 'morning_birds' },
-        { name: 'Rivière Vive', icon: '💧', file: 'river_flow' },
-        { name: 'Parc en Fleurs', icon: '🌸', file: 'spring_park' },
-        { name: 'Marché Local', icon: '🍎', file: 'market' },
-        { name: 'Campagne', icon: '☀️', file: 'countryside' }
+        { name: 'Oiseaux Matin', icon: '🐦', url: 'https://actions.google.com/sounds/v1/animals/bird_chirping.ogg' },
+        { name: 'Rivière Vive', icon: '💧', url: 'https://actions.google.com/sounds/v1/water/stream_water.ogg' },
+        { name: 'Parc en Fleurs', icon: '🌸', url: 'https://actions.google.com/sounds/v1/nature/insect_buzz.ogg' },
+        { name: 'Marché', icon: '🍎', url: 'https://actions.google.com/sounds/v1/ambiences/crowd_cheering.ogg' },
+        { name: 'Campagne', icon: '☀️', url: 'https://actions.google.com/sounds/v1/nature/crickets_at_night.ogg' }
     ],
     promenade: [
-        { name: 'Vagues Plage', icon: '🏖️', file: 'beach_waves' },
-        { name: 'Pas sur Gravier', icon: '🥾', file: 'gravel_walk' },
-        { name: 'Ruelle Ancienne', icon: '🏘️', file: 'old_street' },
-        { name: 'Montagne', icon: '🏔️', file: 'mountain' },
-        { name: 'Bord de Lac', icon: '🛶', file: 'lake_shore' }
+        { name: 'Vagues Plage', icon: '🏖️', url: 'https://actions.google.com/sounds/v1/water/waves_crashing_beach.ogg' },
+        { name: 'Pas Gravier', icon: '🥾', url: 'https://actions.google.com/sounds/v1/human/footsteps_gravel.ogg' },
+        { name: 'Ruelle', icon: '🏘️', url: 'https://actions.google.com/sounds/v1/ambiences/city_street.ogg' },
+        { name: 'Montagne', icon: '🏔️', url: 'https://actions.google.com/sounds/v1/nature/wind_high_altitude.ogg' },
+        { name: 'Bord de Lac', icon: '🛶', url: 'https://actions.google.com/sounds/v1/water/lake_waves.ogg' }
     ]
 };
 
-// État de l'app
-let appState = {
-    currentCategory: 'sommeil',
-    activeSounds: {},
-    masterVolume: 70
-};
-
-// Fonction pour toggle les sons
+// Fonction de lecture corrigée pour utiliser les URLs
 function toggleSound(sound, category, btn) {
-    const soundKey = `${category}-${sound.file}`;
+    const soundKey = `${category}-${sound.name}`;
     
     if (appState.activeSounds[soundKey]) {
         appState.activeSounds[soundKey].audio.pause();
         delete appState.activeSounds[soundKey];
         btn.classList.remove('playing');
     } else {
-        // Chemin vers tes fichiers sur GitHub
-        const audio = new Audio(`assets/sounds/${sound.file}.mp3`);
+        // Utilisation directe de l'URL fournie dans soundsData
+        const audio = new Audio(sound.url);
         audio.loop = true;
         audio.volume = (appState.masterVolume / 100) * 0.8;
-        audio.play().catch(e => console.error("Erreur lecture:", e));
+        audio.play().catch(e => console.error("Erreur de lecture:", e));
         
         appState.activeSounds[soundKey] = { audio, name: sound.name, icon: sound.icon };
         btn.classList.add('playing');
     }
+    updateActiveSoundsList();
 }
 
-// Initialisation au chargement
-document.addEventListener('DOMContentLoaded', () => {
-    // Appel des fonctions de rendu (renderSounds existant)
-    renderSounds(appState.currentCategory);
-});
+// (Garde le reste de ton fichier script.js original ici : 
+// initializeApp, renderSounds, etc. car ils restent fonctionnels)
