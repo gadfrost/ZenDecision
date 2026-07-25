@@ -1,35 +1,35 @@
 // ============================================
-// ZenDecision - Script Complet & Total
+// ZenDecision - Script Définitif (Sons Stables)
 // ============================================
 
 const soundsData = {
     sommeil: [
-        { name: 'Océan Nocturne', icon: '🌊', url: 'https://actions.google.com/sounds/v1/water/ocean_waves.ogg' },
-        { name: 'Pluie Douce', icon: '🌧️', url: 'https://actions.google.com/sounds/v1/weather/rain_light.ogg' },
-        { name: 'Orage Lointain', icon: '⛈️', url: 'https://actions.google.com/sounds/v1/weather/thunderstorm.ogg' },
-        { name: 'Bruit Blanc', icon: '🌙', url: 'https://actions.google.com/sounds/v1/ambiences/white_noise.ogg' },
-        { name: 'Vagues Calmes', icon: '🌊', url: 'https://actions.google.com/sounds/v1/water/waves_crashing.ogg' }
+        { name: 'Océan Nocturne', icon: '🌊', url: 'https://upload.wikimedia.org/wikipedia/commons/b/b5/Ocean_waves_on_shingle_beach.ogg' },
+        { name: 'Pluie Douce', icon: '🌧️', url: 'https://upload.wikimedia.org/wikipedia/commons/4/4b/Rain_heavy_on_roof_and_thunder.ogg' },
+        { name: 'Orage Lointain', icon: '⛈️', url: 'https://upload.wikimedia.org/wikipedia/commons/3/3c/Thunderstorm_in_the_woods.ogg' },
+        { name: 'Bruit Blanc', icon: '🌙', url: 'https://upload.wikimedia.org/wikipedia/commons/c/c5/White_noise.ogg' },
+        { name: 'Vagues Calmes', icon: '🌊', url: 'https://upload.wikimedia.org/wikipedia/commons/b/b5/Ocean_waves_on_shingle_beach.ogg' }
     ],
     etude: [
         { name: 'Café Calme', icon: '☕', url: 'https://actions.google.com/sounds/v1/ambiences/coffee_shop.ogg' },
-        { name: 'Bibliothèque', icon: '📚', url: 'https://actions.google.com/sounds/v1/ambiences/library.ogg' },
-        { name: 'Forêt Calme', icon: '🌲', url: 'https://actions.google.com/sounds/v1/nature/forest_bird_call.ogg' },
-        { name: 'Vent Doux', icon: '🍃', url: 'https://actions.google.com/sounds/v1/nature/wind_rustling_leaves.ogg' },
-        { name: 'Lo-Fi Ambiance', icon: '🎧', url: 'https://actions.google.com/sounds/v1/ambiences/city_street_traffic.ogg' }
+        { name: 'Bibliothèque', icon: '📚', url: 'https://upload.wikimedia.org/wikipedia/commons/8/8c/Indoor_ambience_library.ogg' },
+        { name: 'Forêt Calme', icon: '🌲', url: 'https://upload.wikimedia.org/wikipedia/commons/5/54/Summer_forest_ambience.ogg' },
+        { name: 'Vent Doux', icon: '🍃', url: 'https://upload.wikimedia.org/wikipedia/commons/0/07/Wind_in_trees.ogg' },
+        { name: 'Lo-Fi Ambiance', icon: '🎧', url: 'https://actions.google.com/sounds/v1/ambiences/coffee_shop.ogg' }
     ],
     joie: [
-        { name: 'Oiseaux Matin', icon: '🐦', url: 'https://actions.google.com/sounds/v1/animals/bird_chirping.ogg' },
-        { name: 'Rivière Vive', icon: '💧', url: 'https://actions.google.com/sounds/v1/water/stream_water.ogg' },
-        { name: 'Parc en Fleurs', icon: '🌸', url: 'https://actions.google.com/sounds/v1/nature/insect_buzz.ogg' },
+        { name: 'Oiseaux Matin', icon: '🐦', url: 'https://upload.wikimedia.org/wikipedia/commons/6/6f/Early_morning_birds.ogg' },
+        { name: 'Rivière Vive', icon: '💧', url: 'https://upload.wikimedia.org/wikipedia/commons/2/2f/Small_river_stream.ogg' },
+        { name: 'Parc en Fleurs', icon: '🌸', url: 'https://upload.wikimedia.org/wikipedia/commons/5/54/Summer_forest_ambience.ogg' },
         { name: 'Marché', icon: '🍎', url: 'https://actions.google.com/sounds/v1/ambiences/crowd_cheering.ogg' },
-        { name: 'Campagne', icon: '☀️', url: 'https://actions.google.com/sounds/v1/nature/crickets_at_night.ogg' }
+        { name: 'Campagne', icon: '☀️', url: 'https://upload.wikimedia.org/wikipedia/commons/6/6f/Early_morning_birds.ogg' }
     ],
     promenade: [
-        { name: 'Vagues Plage', icon: '🏖️', url: 'https://actions.google.com/sounds/v1/water/waves_crashing_beach.ogg' },
+        { name: 'Vagues Plage', icon: '🏖️', url: 'https://upload.wikimedia.org/wikipedia/commons/b/b5/Ocean_waves_on_shingle_beach.ogg' },
         { name: 'Pas Gravier', icon: '🥾', url: 'https://actions.google.com/sounds/v1/human/footsteps_gravel.ogg' },
         { name: 'Ruelle', icon: '🏘️', url: 'https://actions.google.com/sounds/v1/ambiences/city_street.ogg' },
-        { name: 'Montagne', icon: '🏔️', url: 'https://actions.google.com/sounds/v1/nature/wind_high_altitude.ogg' },
-        { name: 'Bord de Lac', icon: '🛶', url: 'https://actions.google.com/sounds/v1/water/lake_waves.ogg' }
+        { name: 'Montagne', icon: '🏔️', url: 'https://upload.wikimedia.org/wikipedia/commons/0/07/Wind_in_trees.ogg' },
+        { name: 'Bord de Lac', icon: '🛶', url: 'https://upload.wikimedia.org/wikipedia/commons/2/2f/Small_river_stream.ogg' }
     ]
 };
 
@@ -78,7 +78,7 @@ function initializeApp() {
 
 function renderSounds(category) {
     soundGrid.innerHTML = '';
-    soundsData[category].forEach((sound, index) => {
+    soundsData[category].forEach((sound) => {
         const btn = document.createElement('button');
         btn.className = 'sound-btn';
         btn.innerHTML = `<span class="icon">${sound.icon}</span><span class="label">${sound.name}</span><span class="indicator"></span>`;
