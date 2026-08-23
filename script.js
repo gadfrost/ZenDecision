@@ -25,7 +25,7 @@ const soundsData = {
         { id: 'countryside', name: 'Campagne', icon: '☀️', url: 'https://actions.google.com/sounds/v1/ambiences/outdoor_farm_sounds.ogg' }
     ],
     promenade: [
-        { id: 'beach-waves', name: 'Vagues Plage', icon: '🏖️', url: 'https://actions.google.com/sounds/v1/ambiences/warm_evening_outdoors.ogg' },
+        { id: 'beach-waves', name: 'Vagues Plage', icon: '🏖️', url: 'https://actions.google.com/sounds/v1/ambiences/summer_beach_parking_lot.ogg' },
         { id: 'gravel', name: 'Pas Gravier', icon: '🥾', url: 'https://actions.google.com/sounds/v1/ambiences/outdoor_sounds_with_whirr.ogg' },
         { id: 'street', name: 'Ruelle', icon: '🏘️', url: 'https://actions.google.com/sounds/v1/ambiences/distant_highway.ogg' },
         { id: 'mountain', name: 'Montagne', icon: '🏔️', url: 'https://actions.google.com/sounds/v1/weather/windy_forrest.ogg' },
