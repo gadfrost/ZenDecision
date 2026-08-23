@@ -4,31 +4,31 @@
 
 const soundsData = {
     sommeil: [
-        { id: 'ocean', name: 'Océan Nocturne', icon: '🌊', url: 'https://actions.google.com/sounds/v1/ambiences/outside_night.ogg' },
-        { id: 'rain', name: 'Pluie Douce', icon: '🌧️', url: 'https://actions.google.com/sounds/v1/ambiences/crickets_with_distant_traffic.ogg' },
-        { id: 'storm', name: 'Orage Lointain', icon: '⛈️', url: 'https://actions.google.com/sounds/v1/ambiences/daytime_forrest_bonfire.ogg' },
+        { id: 'ocean', name: 'Océan Nocturne', icon: '🌊', url: 'https://actions.google.com/sounds/v1/ambiences/lake_wind_ambience.ogg' },
+        { id: 'rain', name: 'Pluie Douce', icon: '🌧️', url: 'https://actions.google.com/sounds/v1/weather/light_rain.ogg' },
+        { id: 'storm', name: 'Orage Lointain', icon: '⛈️', url: 'https://actions.google.com/sounds/v1/weather/distant_thunder.ogg' },
         { id: 'white-noise', name: 'Bruit Blanc', icon: '🌙', url: 'https://actions.google.com/sounds/v1/ambiences/ambient_hum_air_conditioner.ogg' },
-        { id: 'calm-waves', name: 'Vagues Calmes', icon: '🌊', url: 'https://actions.google.com/sounds/v1/ambiences/warm_evening_outdoors.ogg' }
+        { id: 'calm-waves', name: 'Vagues Calmes', icon: '🌊', url: 'https://actions.google.com/sounds/v1/ambiences/summer_beach_parking_lot.ogg' }
     ],
     etude: [
         { id: 'coffee', name: 'Café Calme', icon: '☕', url: 'https://actions.google.com/sounds/v1/ambiences/coffee_shop.ogg' },
         { id: 'library', name: 'Bibliothèque', icon: '📚', url: 'https://actions.google.com/sounds/v1/ambiences/convention_hall_ambience_noise.ogg' },
         { id: 'forest', name: 'Forêt Calme', icon: '🌲', url: 'https://actions.google.com/sounds/v1/ambiences/spring_day_forest.ogg' },
-        { id: 'wind', name: 'Vent Doux', icon: '🍃', url: 'https://actions.google.com/sounds/v1/ambiences/warm_afternoon_outdoors.ogg' },
+        { id: 'wind', name: 'Vent Doux', icon: '🍃', url: 'https://actions.google.com/sounds/v1/weather/light_breeze.ogg' },
         { id: 'lofi', name: 'Lo-Fi Ambiance', icon: '🎧', url: 'https://actions.google.com/sounds/v1/ambiences/arcade_room.ogg' }
     ],
     joie: [
-        { id: 'birds', name: 'Oiseaux Matin', icon: '🐦', url: 'https://actions.google.com/sounds/v1/ambiences/outdoor_summer_ambience.ogg' },
+        { id: 'birds', name: 'Oiseaux Matin', icon: '🐦', url: 'https://actions.google.com/sounds/v1/ambiences/jungle_atmosphere_morning.ogg' },
         { id: 'river', name: 'Rivière Vive', icon: '💧', url: 'https://actions.google.com/sounds/v1/ambiences/jungle_small_rapids.ogg' },
         { id: 'flower-park', name: 'Parc en Fleurs', icon: '🌸', url: 'https://actions.google.com/sounds/v1/ambiences/outdoor_suburb_ambience.ogg' },
         { id: 'market', name: 'Marché', icon: '🍎', url: 'https://actions.google.com/sounds/v1/ambiences/small_outdoor_marketplace.ogg' },
         { id: 'countryside', name: 'Campagne', icon: '☀️', url: 'https://actions.google.com/sounds/v1/ambiences/outdoor_farm_sounds.ogg' }
     ],
     promenade: [
-        { id: 'beach-waves', name: 'Vagues Plage', icon: '🏖️', url: 'https://actions.google.com/sounds/v1/ambiences/summer_beach_parking_lot.ogg' },
+        { id: 'beach-waves', name: 'Vagues Plage', icon: '🏖️', url: 'https://actions.google.com/sounds/v1/ambiences/warm_evening_outdoors.ogg' },
         { id: 'gravel', name: 'Pas Gravier', icon: '🥾', url: 'https://actions.google.com/sounds/v1/ambiences/outdoor_sounds_with_whirr.ogg' },
         { id: 'street', name: 'Ruelle', icon: '🏘️', url: 'https://actions.google.com/sounds/v1/ambiences/distant_highway.ogg' },
-        { id: 'mountain', name: 'Montagne', icon: '🏔️', url: 'https://actions.google.com/sounds/v1/ambiences/jungle_atmosphere_night.ogg' },
+        { id: 'mountain', name: 'Montagne', icon: '🏔️', url: 'https://actions.google.com/sounds/v1/weather/windy_forrest.ogg' },
         { id: 'lake', name: 'Bord de Lac', icon: '🛶', url: 'https://actions.google.com/sounds/v1/ambiences/lake_wind_ambience.ogg' }
     ]
 };
@@ -108,7 +108,8 @@ function makeKey(category, sound) {
 }
 
 function getVolume() {
-    return (appState.masterVolume / 100) * 0.8;
+    // Niveau légèrement renforcé, sans jamais dépasser la limite native du lecteur HTMLAudio.
+    return Math.min(1, (appState.masterVolume / 100) * 1.0);
 }
 
 async function toggleSound(sound, category, btn) {
@@ -168,7 +169,7 @@ function startFallback(soundKey, entry) {
         source.buffer = buffer;
         source.loop = true;
         const gain = audioContext.createGain();
-        gain.gain.value = getVolume() * 0.35;
+        gain.gain.value = getVolume() * 0.55;
         source.connect(gain).connect(audioContext.destination);
         source.start();
         entry.fallback = { source, gain };
@@ -197,7 +198,7 @@ function stopSound(soundKey) {
 function updateAllSoundVolumes() {
     Object.values(appState.activeSounds).forEach(entry => {
         if (entry.audio) entry.audio.volume = getVolume();
-        if (entry.fallback) entry.fallback.gain.gain.value = getVolume() * 0.35;
+        if (entry.fallback) entry.fallback.gain.gain.value = getVolume() * 0.55;
     });
 }
 
