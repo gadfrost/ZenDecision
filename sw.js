@@ -1,9 +1,5 @@
-// ============================================
-// ZenDecision - Service Worker Corrigé
-// Optimisé pour les ressources externes
-// ============================================
-
-const CACHE_NAME = 'zendecision-v4';
+// ZenDecision — Service Worker
+const CACHE_NAME = 'zendecision-v5';
 const ASSETS = [
   './',
   './index.html',
@@ -14,36 +10,26 @@ const ASSETS = [
   './assets/icon-512.png'
 ];
 
-// Installation : Mise en cache des fichiers principaux de l'interface
-self.addEventListener('install', (event) => {
+self.addEventListener('install', event => {
+  self.skipWaiting();
+  event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(ASSETS)));
+});
+
+self.addEventListener('activate', event => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(ASSETS);
-    })
+    Promise.all([
+      self.clients.claim(),
+      caches.keys().then(names => Promise.all(
+        names.filter(name => name !== CACHE_NAME).map(name => caches.delete(name))
+      ))
+    ])
   );
 });
 
-// Activation : Nettoyage des anciens caches
-self.addEventListener('activate', (event) => {
-  event.waitUntil(
-    caches.keys().then((cacheNames) => {
-      return Promise.all(
-        cacheNames.map((cacheName) => {
-          if (cacheName !== CACHE_NAME) {
-            return caches.delete(cacheName);
-          }
-        })
-      );
-    })
-  );
-});
-
-// Fetch : Stratégie "Cache-first" pour l'interface
-// Les sons étant externes, ils sont gérés directement par le navigateur
-self.addEventListener('fetch', (event) => {
+// Le cache concerne uniquement l’interface. Les fichiers audio distants passent par le réseau.
+self.addEventListener('fetch', event => {
+  if (new URL(event.request.url).origin !== self.location.origin) return;
   event.respondWith(
-    caches.match(event.request).then((response) => {
-      return response || fetch(event.request);
-    })
+    caches.match(event.request).then(cached => cached || fetch(event.request))
   );
 });
